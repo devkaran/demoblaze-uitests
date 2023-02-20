@@ -23,4 +23,4 @@ The project is organized into the following directories:
 3. Run `mvn test` to execute all tests.
 
 ## How to Generate Test Reports
-After running the tests, the test reports can be found in the `target/testNgReport` directory. Open the `index.html` file in a web browser to view the report.
+After running the tests, the test reports can be found in the `target/testNgReport` directory. Open the `AutomationReportResultsToModify.html` file in a web browser to view the report.
