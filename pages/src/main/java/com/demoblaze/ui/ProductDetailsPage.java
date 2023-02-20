@@ -58,7 +58,7 @@ public class ProductDetailsPage {
             if (dialog.message().contains("Product")) {
                 log.info("Product added to cart successfully");
                 dialog.accept();
-                System.out.println("accepted");
+                log.info("Accepted browser alert");
             } else {
                 log.warn("Unexpected alert text: {}", dialog.message());
                 dialog.dismiss();

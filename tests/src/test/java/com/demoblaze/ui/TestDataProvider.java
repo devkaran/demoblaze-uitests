@@ -3,7 +3,6 @@ package com.demoblaze.ui;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.Playwright;
 import org.testng.annotations.DataProvider;
-import org.testng.collections.Lists;
 
 public class TestDataProvider {
 
@@ -38,8 +37,7 @@ public class TestDataProvider {
 
 // Return the test data as a 2D array, where each row represents a set of input parameters to the test method.
         return new Object[][]{
-//                { testConfiguration, browser, Lists.newArrayList("Samsung galaxy s6", "Iphone 6 32gb"), orderDetailsFormInput}
-                { testConfiguration, browser, Lists.newArrayList("A", "B"), orderDetailsFormInput}
+                { 2, testConfiguration, browser, orderDetailsFormInput}
         };
     }
 }

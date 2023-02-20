@@ -7,7 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.List;
+import java.util.Map;
 
 @Log4j2
 public class EndToEndTest {
@@ -15,11 +15,10 @@ public class EndToEndTest {
      This method tests the adding and removing of products to/from the cart
      @param testConfiguration test configuration for the test
      @param browser the browser in which to run the test
-     @param sampleProductNames list of sample product names to be added to cart
      @param orderDetailsFormInput order details input form for order placement
      */
     @Test(dataProvider = "testDP", dataProviderClass = TestDataProvider.class)
-    public void addToCartTest(TestConfiguration testConfiguration, Browser browser, List<String> sampleProductNames, OrderDetails orderDetailsFormInput) {
+    public void addToCartTest(int totalItemsToAdd, TestConfiguration testConfiguration, Browser browser, OrderDetails orderDetailsFormInput) {
 // create a new browser context and page
         BrowserContext context = browser.newContext();
         Page page = context.newPage();
@@ -31,22 +30,25 @@ public class EndToEndTest {
 
 // add products to cart and get the total amount
         productDetailsPage.addAlertHandler();
-        Double totalAmount = TestUtils.addProductsToCartAndReturnTotalAmount(sampleProductNames, homePage, productDetailsPage);
+        Map<String, Double> productPriceMap = TestUtils.addProductsToCartAndReturnTotalAmount(totalItemsToAdd, homePage, productDetailsPage);
 
 // navigate to cart and validate products in cart and total amount
         productDetailsPage.clickCart();
         CartPage cartPage = CartPage.builder().page(page).build();
-        Assert.assertTrue(cartPage.isProductsInCart(sampleProductNames));
+        Assert.assertTrue(cartPage.isProductsInCart(productPriceMap));
+        double totalAmount = productPriceMap.values().stream().mapToDouble(Double::doubleValue).sum();
         Assert.assertEquals(cartPage.getCartTotal().compareTo(totalAmount), 0);
 
 // remove last product from cart and validate the new total amount
-        Double removedProductAmount = cartPage.removeProductFromCartAndGetAmount(sampleProductNames.get(sampleProductNames.size() - 1));
+        String productToBeRemoved = productPriceMap.keySet().stream().skip(productPriceMap.size() - 1).findFirst().orElse(null);
+        Double removedProductAmount = cartPage.removeProductFromCartAndGetAmount(productToBeRemoved);
+        Assert.assertEquals(removedProductAmount, productPriceMap.get(productToBeRemoved));
         totalAmount -= removedProductAmount;
         Assert.assertEquals(cartPage.getCartTotal().compareTo(totalAmount), 0);
-        sampleProductNames.remove(sampleProductNames.size() - 1);
+        productPriceMap.remove(productToBeRemoved);
 
 // validate the remaining products in cart and place the order
-        Assert.assertTrue(cartPage.isProductsInCart(sampleProductNames));
+        Assert.assertTrue(cartPage.isProductsInCart(productPriceMap));
         orderDetailsFormInput = orderDetailsFormInput.toBuilder().expectedTotalAmount(totalAmount).build();
         cartPage.fillOrderFormAndPlaceOrder(orderDetailsFormInput);
         TestUtils.validateOrderDetails(cartPage.getOrderConfirmationMessage(), orderDetailsFormInput);
