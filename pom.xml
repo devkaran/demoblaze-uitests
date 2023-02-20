@@ -8,7 +8,7 @@
   <packaging>pom</packaging>
 
   <name>demoblaze-uitests</name>
-  <url>http://maven.apache.org</url>
+  <url>https://www.demoblaze.com/index.html</url>
   <modules>
     <module>pages</module>
     <module>tests</module>
@@ -16,6 +16,7 @@
   </modules>
 
   <properties>
+    <java.version>11</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -26,21 +27,39 @@
         <artifactId>testng</artifactId>
         <version>7.7.1</version>
       </dependency>
+
       <dependency>
         <groupId>com.microsoft.playwright</groupId>
         <artifactId>playwright</artifactId>
         <version>1.30.0</version>
       </dependency>
+
       <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
-        <version>1.18.26</version>
+        <version>1.18.24</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>com.aventstack</groupId>
-        <artifactId>extentreports</artifactId>
-        <version>5.0.9</version>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>2.19.0</version>
       </dependency>
+
     </dependencies>
   </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>11</source>
+          <target>11</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

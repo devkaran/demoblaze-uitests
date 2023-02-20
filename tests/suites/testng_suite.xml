@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="ClaimsService" parallel="true">
+    <listeners>
+        <listener class-name="com.demoblaze.ui.testng_listeners.ExtentTestNGListener"/>
+    </listeners>
+    <test name="ClaimsServiceTests">
+        <classes>
+            <class name="com.demoblaze.ui.EndToEndTest" />
+        </classes>
+    </test>
+</suite>
